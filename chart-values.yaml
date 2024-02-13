@@ -1,5 +1,5 @@
 image:
-  repository: registry.ustpace.com/docker-sandbox/demo_project-micro-service-2
+  repository: registry.ustpace.com/docker-sandbox/demo-project-micro-service-2
   tag: latest
   pullPolicy: Always
 ingress:
@@ -7,7 +7,7 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: nginx-internal
   hosts:
-  - host: demo_project-micro-service-2-dev.dagility.com
+  - host: demo-project-micro-service-2-dev.dagility.com
     paths:
     - /
 serviceAccount:
