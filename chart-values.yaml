@@ -1,5 +1,5 @@
 image:
-  repository: artifactory.dagility.com/docker/demo_project-micro-service-2
+  repository: registry.ustpace.com/docker-sandbox/demo_project-micro-service-2
   tag: latest
   pullPolicy: Always
 ingress:
