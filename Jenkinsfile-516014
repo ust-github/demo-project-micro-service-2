@@ -17,14 +17,14 @@ ln -sf /usr/local/bin/helm3 /usr/local/bin/helm
                 script { sh script: 'sleep 0.005', label: '4j2evm'}
                 withCredentials([usernameColonPassword(credentialsId: 'nexus-registry', variable: 'USERNAME_PASSWORD')]) {
                     sh '''
-          curl -s -u ${USERNAME_PASSWORD} --fail --upload-file demo_project-micro-service-2-chart-0.1.0.tgz "https://registry.ustpace.com/repository/helm-sandbox/demo_project-micro-service-2-chart-0.1.0.tgz"
+          curl -s -u ${USERNAME_PASSWORD} --fail --upload-file demo-project-micro-service-2-chart-0.1.0.tgz "https://registry.ustpace.com/repository/helm-sandbox/demo-project-micro-service-2-chart-0.1.0.tgz"
       '''
                 }// end step group
                 withCredentials([   usernamePassword(credentialsId: 'nexus-registry', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                    sh script: 'helm repo add demo_project-micro-service-2 https://registry.ustpace.com/repository/helm-sandbox --username $USER --password $PASS', label: 'rvsu01'
+                    sh script: 'helm repo add demo-project-micro-service-2 https://registry.ustpace.com/repository/helm-sandbox --username $USER --password $PASS', label: 'rvsu01'
                 }
                 sh script: 'helm repo update', label: 'mesfnb'
-                sh script: 'helm upgrade demo_project-micro-service-2-deployment demo_project-micro-service-2/demo_project-micro-service-2-chart --install --values chart-values.yaml --namespace dev --set ingress.hosts[0].host=demo_project-micro-service-2-dev.dagility.com', label: 'ixxrui'
+                sh script: 'helm upgrade demo-project-micro-service-2-deployment demo-project-micro-service-2/demo-project-micro-service-2-chart --install --values chart-values.yaml --namespace dev --set ingress.hosts[0].host=demo-project-micro-service-2-dev.dagility.com', label: 'ixxrui'
             } //end steps
         } // end stage Deploy
     }
