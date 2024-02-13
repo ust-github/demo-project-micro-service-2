@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    tools {
+        maven 'maven'
+    }
+    options {
+        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')
+        disableConcurrentBuilds()
+    }
+    stages {
+        stage ('Deploy (udkjn6)') {
+            steps {
+                script {
+                    withCredentials([usernameColonPassword(credentialsId: 'nexus-registry', variable: 'REG_CREDS')]) {
+                        sh 'buildah bud --no-cache --pull --force-rm --format docker --creds ${REG_CREDS}' + " -t registry.ustpace.com/docker-sandbox/demo_project-micro-service-2:latest --iidfile iid ."
+                        sh 'buildah push --rm --creds ${REG_CREDS} $(cat iid) ' + " registry.ustpace.com/docker-sandbox/demo_project-micro-service-2:latest"
+                    }
+                }
+                script { sh script: 'sleep 0.005', label: 'fmw4o7'}
+
+                sh script: '''
+ln -sf /usr/local/bin/helm3 /usr/local/bin/helm
+''', label: 'rlklcw'
+                sh script: 'helm package chart', label: 'ijhrf0'
+                script { sh script: 'sleep 0.005', label: '4j2evm'}
+                withCredentials([usernameColonPassword(credentialsId: 'nexus-registry', variable: 'USERNAME_PASSWORD')]) {
+                    sh '''
+          curl -s -u ${USERNAME_PASSWORD} --fail --upload-file demo_project-micro-service-2-chart-0.1.0.tgz "https://registry.ustpace.com/repository/helm-sandbox/demo_project-micro-service-2-chart-0.1.0.tgz"
+      '''
+                }// end step group
+                withCredentials([   usernamePassword(credentialsId: 'nexus-registry', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                    sh script: 'helm repo add demo_project-micro-service-2 https://registry.ustpace.com/repository/helm-sandbox --username $USER --password $PASS', label: 'rvsu01'
+                }
+                sh script: 'helm repo update', label: 'mesfnb'
+                sh script: 'helm upgrade demo_project-micro-service-2-deployment demo_project-micro-service-2/demo_project-micro-service-2-chart --install --values chart-values.yaml --namespace dev --set ingress.hosts[0].host=demo_project-micro-service-2-dev.dagility.com', label: 'ixxrui'
+            } //end steps
+        } // end stage Deploy
+    }
+}
