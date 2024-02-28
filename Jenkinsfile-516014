@@ -24,7 +24,7 @@ ln -sf /usr/local/bin/helm3 /usr/local/bin/helm
                     sh script: 'helm repo add demo-project-micro-service-2 https://registry.ustpace.com/repository/helm-sandbox --username $USER --password $PASS', label: 'rvsu01'
                 }
                 sh script: 'helm repo update', label: 'mesfnb'
-                sh script: 'helm upgrade demo-project-micro-service-2-deployment demo-project-micro-service-2/demo-project-micro-service-2-chart --install --values chart-values.yaml --namespace dev --set ingress.hosts[0].host=demo-project-micro-service-2-dev.dagility.com', label: 'ixxrui'
+                sh script: 'helm upgrade demo-project-micro-service-2-deployment demo-project-micro-service-2/demo-project-micro-service-2-chart --install --values chart-values.yaml --namespace sit --set ingress.hosts[0].host=demo-project-micro-service-2-sit.dagility.com', label: 'ixxrui'
             } //end steps
         } // end stage Deploy
     }
